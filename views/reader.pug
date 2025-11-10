@@ -1,0 +1,63 @@
+extends layout
+
+block content
+  #left-panel-overlay.left-panel-overlay
+  #left-panel-toggle-btn.left-panel-toggle-btn ☰
+  #left-panel.left-panel.no-transition
+    #left-panel-content.left-panel-content
+      .left-panel-header
+        h3.title.is-6 Читалка
+        button#left-panel-collapse.button.is-small.is-text(type="button")
+      .left-panel-section
+        label.label.is-small Шрифт
+        .buttons
+          button#font-wix.button.is-small.mr-2.mb-2(type="button") Wix
+          button#font-inter.button.is-small.mr-2.mb-2(type="button") Inter
+          button#font-roboto.button.is-small.mr-2.mb-2(type="button") Roboto
+          button#font-opensans.button.is-small.mr-2.mb-2(type="button") Open Sans
+          button#font-times.button.is-small.mr-2.mb-2(type="button") Times
+          button#font-system.button.is-small.mb-2(type="button") Системный
+      .left-panel-section
+        label.label.is-small Размер шрифта
+        input#font-size-slider.slider.is-fullwidth(type="range", min="12", max="24", value="16", step="1")
+        .font-size-value.has-text-centered.mt-2
+          span#font-size-value 16px
+      .left-panel-section
+        label.checkbox
+          input#progress-bar-toggle(type="checkbox", checked)
+          span.ml-2 Показывать прогресс-бар
+      .left-panel-section
+        label.label.is-small Протоколы
+        button#protocols-panel-toggle.button.is-small.is-fullwidth.is-dark(type="button") 📋 Список
+        .file.has-name.mt-2
+          label.file-label
+            input#file-input.file-input(type="file", accept=".md,.docx,.txt")
+            span.file-cta
+              span.file-icon
+              span.file-label Файл
+            span#file-name.file-name
+      #protocols-list-left.protocols-list-left
+  #protocols-panel-overlay.protocols-panel-overlay
+  #protocols-panel.protocols-panel
+    .protocols-panel-header
+      h3.title.is-5 Протоколы
+      button#protocols-panel-close.button.is-small.is-text(type="button") ✕
+    #protocols-list.protocols-list
+  .container.is-fluid
+    .columns.is-centered
+      .column.is-three-quarters-desktop.is-full-tablet.animate__animated.animate__fadeIn
+        .box
+          .level.mb-5
+            .level-left
+              h1.title.has-text-centered-mobile Читалка протоколов
+            .level-right
+              a.button.is-text(href="/") ← Генератор
+          #reader-content.content.mt-5
+          #reader-placeholder.reader-placeholder(style="display: flex;")
+            .reader-placeholder-icon
+            .reader-placeholder-text Что будем прорабатывать сегодня?
+          #progress-container
+            #progress-bar.progress-bar
+            #progress-text.progress-text 0%
+          #reference-info.reference-info
+

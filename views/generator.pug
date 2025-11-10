@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  .container.is-fluid
+    .columns.is-centered
+      .column.is-half-desktop.is-three-quarters-tablet.animate__animated.animate__fadeIn
+        .box
+          .level.mb-5
+            .level-left
+              h1.title.has-text-centered-mobile Генератор протоколов
+            .level-right
+              a.button.is-text(href="/reader") Читалка →
+          form#generator-form
+            .field
+              label.label Название протокола
+              .control
+                input.input(type="text", name="protocolName", placeholder="123", value="", required)
+            .field
+              label.label Материал для обработки
+              .control
+                textarea.textarea(name="material", rows="12", placeholder="Я боюсь 1\nЯ боюсь 2\nЯ боюсь 3")
+            .field.mt-5
+              .control
+                button.button.is-primary.is-fullwidth(type="submit") Сгенерировать протокол
+                button.button.is-text.is-fullwidth.mt-2(type="button", id="template-btn") 📝 Шаблон протокола
+        #template-modal.modal
+          .modal-background
+          .modal-card
+            header.modal-card-head
+              p.modal-card-title Шаблон протокола
+              button.delete(aria-label="close", id="template-modal-close")
+            section.modal-card-body
+              .field
+                label.label Шаблон
+                .control
+                  textarea.textarea#template-textarea(rows="20", placeholder="Введите шаблон протокола...")
+              .field.mt-4
+                .control
+                  button.button.is-danger.is-outlined.is-fullwidth(type="button", id="template-reset") Сбросить шаблон
+            footer.modal-card-foot
+              button.button.is-success(type="button", id="template-save") Сохранить
+              button.button(type="button", id="template-cancel") Отмена
+

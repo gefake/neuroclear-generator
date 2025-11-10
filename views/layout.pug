@@ -1,0 +1,30 @@
+doctype html
+html(lang="ru")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Генератор BSFF
+    link(rel="icon", href="/favicon.ico", type="image/x-icon")
+    script.
+      (function() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        const bgSecondary = theme === 'dark' ? '#252525' : '#f0f0f0';
+        const textPrimary = theme === 'dark' ? '#c9d1d9' : '#2c2c2c';
+        document.documentElement.style.backgroundColor = bgSecondary;
+        document.body.style.backgroundColor = bgSecondary;
+        document.body.style.color = textPrimary;
+      })();
+    link(rel="preconnect", href="https://fonts.googleapis.com")
+    link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Roboto:wght@400;500;600&family=Open+Sans:wght@400;500;600&display=swap", rel="stylesheet")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css")
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    block content
+    script(src="/js/main.js")
+    script.
+      document.documentElement.classList.add('loaded');
+      document.body.classList.add('loaded');
+
