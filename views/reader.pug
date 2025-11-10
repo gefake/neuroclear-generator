@@ -2,7 +2,6 @@ extends layout
 
 block content
   #left-panel-overlay.left-panel-overlay
-  #left-panel-toggle-btn.left-panel-toggle-btn ☰
   #left-panel.left-panel.no-transition
     #left-panel-content.left-panel-content
       .left-panel-header
@@ -46,12 +45,18 @@ block content
   .container.is-fluid
     .columns.is-centered
       .column.is-three-quarters-desktop.is-full-tablet.animate__animated.animate__fadeIn
-        .box
-          .level.mb-5
+        .nav-box
+          .level.is-mobile
             .level-left
-              h1.title.has-text-centered-mobile Читалка протоколов
+              .level-item
+                button#left-panel-toggle-btn.button.is-small.is-text(type="button", aria-label="Toggle sidebar") ☰
+              .level-item
+                h2.title.is-5.mb-0 Читалка протоколов
             .level-right
-              a.button.is-text(href="/") ← Генератор
+              .buttons.has-addons
+                button#theme-toggle.button.is-small.is-text(type="button", aria-label="Toggle theme") 🌓
+                a.button.is-small.is-text(href="/") ← Генератор
+        .box
           #reader-content.content.mt-5
           #reader-placeholder.reader-placeholder(style="display: flex;")
             .reader-placeholder-icon

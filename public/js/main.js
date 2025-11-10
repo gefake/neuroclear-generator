@@ -1,18 +1,15 @@
-const themeToggle = document.createElement('button');
-themeToggle.className = 'theme-toggle';
-themeToggle.textContent = '🌓';
-themeToggle.setAttribute('aria-label', 'Toggle theme');
-
+// Кнопка темы теперь в навигации
 let currentTheme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', currentTheme);
 
-themeToggle.addEventListener('click', () => {
-  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  localStorage.setItem('theme', currentTheme);
-});
-
-document.body.appendChild(themeToggle);
+const themeToggle = document.getElementById('theme-toggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('theme', currentTheme);
+  });
+}
 
 const navLinks = document.querySelectorAll('a[href="/"], a[href="/reader"]');
 navLinks.forEach(link => {
@@ -515,19 +512,26 @@ function toggleLeftPanelOverlay() {
 if (leftPanel) {
   leftPanel.classList.remove('is-collapsed');
   leftPanel.classList.remove('no-transition');
-  if (leftPanelToggle) {
-    leftPanelToggle.classList.remove('is-visible');
-  }
   
   toggleLeftPanelOverlay();
   
+  function updateToggleButtonVisibility() {
+    if (leftPanelToggle) {
+      if (leftPanel.classList.contains('is-collapsed')) {
+        leftPanelToggle.classList.remove('is-hidden');
+      } else {
+        leftPanelToggle.classList.add('is-hidden');
+      }
+    }
+  }
+
   if (leftPanelToggle) {
     leftPanelToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
       leftPanel.classList.remove('is-collapsed');
-      leftPanelToggle.classList.remove('is-visible');
       toggleLeftPanelOverlay();
+      updateToggleButtonVisibility();
     });
   }
   
@@ -535,22 +539,21 @@ if (leftPanel) {
     leftPanelCollapse.addEventListener('click', (e) => {
       e.stopPropagation();
       leftPanel.classList.add('is-collapsed');
-      if (leftPanelToggle) {
-        leftPanelToggle.classList.add('is-visible');
-      }
       toggleLeftPanelOverlay();
+      updateToggleButtonVisibility();
     });
   }
 
   if (leftPanelOverlay) {
     leftPanelOverlay.addEventListener('click', () => {
       leftPanel.classList.add('is-collapsed');
-      if (leftPanelToggle) {
-        leftPanelToggle.classList.add('is-visible');
-      }
       toggleLeftPanelOverlay();
+      updateToggleButtonVisibility();
     });
   }
+
+  // Инициализация видимости кнопки
+  updateToggleButtonVisibility();
 
   window.addEventListener('resize', () => {
     toggleLeftPanelOverlay();

@@ -4,12 +4,15 @@ block content
   .container.is-fluid
     .columns.is-centered
       .column.is-half-desktop.is-three-quarters-tablet.animate__animated.animate__fadeIn
-        .box
-          .level.mb-5
+        .nav-box
+          .level.is-mobile
             .level-left
-              h1.title.has-text-centered-mobile Генератор протоколов
+              h2.title.is-5.mb-0 Генератор протоколов
             .level-right
-              a.button.is-text(href="/reader") Читалка →
+              .buttons.has-addons
+                button#theme-toggle.button.is-small.is-text(type="button", aria-label="Toggle theme") 🌓
+                a.button.is-small.is-text(href="/reader") Читалка →
+        .box
           form#generator-form
             .field
               label.label Название протокола
