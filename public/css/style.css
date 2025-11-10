@@ -134,6 +134,34 @@ html.loaded .box {
   background-color: transparent;
 }
 
+#template-btn {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+#template-btn:hover {
+  background-color: var(--border-color);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] #template-btn {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] #template-btn:hover {
+  background-color: var(--border-color);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
 .nav-box {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
@@ -145,6 +173,43 @@ html.loaded .box {
   margin-left: auto;
   margin-right: auto;
   position: relative;
+}
+
+.footer-box {
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-top: 1rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+html.loaded .footer-box {
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.footer-box .buttons {
+  margin-bottom: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-box .button.is-text {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.footer-box .button.is-text:hover {
+  background-color: var(--border-color);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 html.loaded .nav-box {
@@ -1031,11 +1096,12 @@ html.loaded .nav-box {
     left: 0;
     top: 0;
     width: 100%;
-    height: auto;
-    max-height: 70vh;
+    height: 100vh;
+    max-height: 100vh;
     border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none;
     transform: translateY(-100%);
+    overflow-y: auto;
   }
 
   .left-panel.is-collapsed {
