@@ -6,19 +6,32 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const uploadDir = process.env.VERCEL ? '/tmp' : 'uploads/';
-if (!process.env.VERCEL && !fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+const isVercel = process.env.VERCEL || process.env.VERCEL_ENV || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+let uploadDir;
+if (isVercel) {
+  uploadDir = '/tmp';
+} else {
+  uploadDir = 'uploads/';
+  if (!fs.existsSync(uploadDir)) {
+    try {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    } catch (error) {
+      console.warn('Failed to create uploads directory, using /tmp:', error.message);
+      uploadDir = '/tmp';
+    }
+  }
 }
+
 const upload = multer({ dest: uploadDir });
 
 app.set('view engine', 'pug');
-const viewsPath = process.env.VERCEL 
+const viewsPath = isVercel 
   ? path.join(process.cwd(), 'views')
   : path.join(__dirname, 'views');
 app.set('views', viewsPath);
 
-const publicPath = process.env.VERCEL 
+const publicPath = isVercel 
   ? path.join(process.cwd(), 'public')
   : path.join(__dirname, 'public');
 app.use(express.static(publicPath));
@@ -116,11 +129,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// Экспортируем app для serverless окружения (Vercel)
-if (process.env.VERCEL) {
+if (isVercel) {
   module.exports = app;
 } else {
-  // Запускаем сервер только в обычном окружении
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
