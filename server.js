@@ -6,16 +6,22 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
+const uploadDir = process.env.VERCEL ? '/tmp' : 'uploads/';
+if (!process.env.VERCEL && !fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 const upload = multer({ dest: uploadDir });
 
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+const viewsPath = process.env.VERCEL 
+  ? path.join(process.cwd(), 'views')
+  : path.join(__dirname, 'views');
+app.set('views', viewsPath);
 
-app.use(express.static('public'));
+const publicPath = process.env.VERCEL 
+  ? path.join(process.cwd(), 'public')
+  : path.join(__dirname, 'public');
+app.use(express.static(publicPath));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -110,8 +116,14 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Экспортируем app для serverless окружения (Vercel)
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  // Запускаем сервер только в обычном окружении
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
