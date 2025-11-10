@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to Server
 
 on:
   push:
@@ -6,20 +6,12 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -31,31 +23,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: |
-          mkdir -p dist
-          cp -r views dist/
-          cp -r public dist/
-          cp server.js dist/
-          cp package.json dist/
-          cp package-lock.json dist/
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          path: dist
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            export NODE_ENV=${{ secrets.NODE_ENV || 'production' }}
+            export PORT=${{ secrets.PORT || '3000' }}
+            git pull origin main
+            npm ci --production
+            pm2 restart neuroclear-generator || pm2 start server.js --name neuroclear-generator
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment successful"
+          else
+            echo "❌ Deployment failed"
+          fi
